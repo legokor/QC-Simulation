@@ -1,0 +1,49 @@
+# reserved for user workspace - where you can dump any WIP
+work*/
+
+# MATLAB cache, autosave and temporary files
+*.asv
+*.m~
+*.autosave
+*.slx.autosave
+*.mdl.autosave
+*.slxc
+*.mlappinstall
+*.mltbx
+*.slx.r*
+
+
+# MATLAB/Simulink generated folders
+slprj/
+sccprj/
+codegen/
+work/
+*.mexa64
+*.mexmaci64
+*.mexmaca64
+*.mexw32
+*.mexw64
+
+# Simulink Coder generated output
+*_grt_rtw/
+*_ert_rtw/
+*_rtw/
+*.rtw
+*.sdf
+*.sldd.autosave
+
+# MATLAB project/user-specific metadata
+.matlab/
+*.prj.user
+
+# Crash dumps and logs
+matlab_crash_dump.*
+java.log.*
+hs_err_pid*.log
+
+# Editor and operating-system leftovers
+*~
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
