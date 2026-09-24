@@ -1,0 +1,29 @@
+component aero_drag_wrench
+% Aerodynamic Drag Block
+% This block calculates 3D drag force using a 3x3 matrix and 3x1 velocity.
+% Later on 3D drag torque can be implemented, right now w in and t out has no effect
+
+    inputs
+        v = { [0; 0; 0], 'm/s' }; % v:left
+        w = { [0; 0; 0], 'rad/s' }; % w:left
+    end
+
+    outputs
+        f = { [0; 0; 0], 'N' };   % f:right
+        t = { [0; 0; 0], 'N*m' };   % t:right
+    end
+
+    parameters
+        % Define your 3x3 drag tensor matrix. 
+        % You can change these default values inside the block mask later!
+        D = { [0.5, 0.0, 0.0; 
+               0.0, 0.8, 0.0; 
+               0.0, 0.0, 1.2], 'N/(m/s)^2' }; 
+    end
+
+    equations
+        % True linear algebra matrix multiplication (Fastest Execution)
+        f == - D * (v .* abs(v)); 
+        t == 0;
+    end
+end
