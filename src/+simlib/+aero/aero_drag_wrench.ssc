@@ -2,6 +2,9 @@ component aero_drag_wrench
 % Aerodynamic Drag Block
 % This block calculates 3D drag force using a 3x3 matrix and 3x1 velocity.
 % Later on 3D drag torque can be implemented, right now w in and t out has no effect
+%
+% Componentwise quadratic body drag with nonnegative diagonal coefficients.
+% v is air-relative velocity expressed in body axes; f uses the same axes.
 
     inputs
         v = { [0; 0; 0], 'm/s' }; % v:left
@@ -15,14 +18,23 @@ component aero_drag_wrench
 
     parameters
         % Define your 3x3 drag tensor matrix. 
-        % You can change these default values inside the block mask later!
+        % Diagonal entries include density and projected area (rho*Cd*A/2).
+        % Off-diagonal coupling is not passive in general for this law.
         D = { [0.5, 0.0, 0.0; 
                0.0, 0.8, 0.0; 
                0.0, 0.0, 1.2], 'N/(m/s)^2' }; 
     end
 
     equations
+		% Ensure positiveness
+        assert(D(1,1) >= 0 && D(2,2) >= 0 && D(3,3) >= 0, ...
+            'Drag coefficients must be nonnegative.');
+		% Offdiagonal enabled
+        %assert(D(1,2) == 0 && D(1,3) == 0 && D(2,1) == 0 && ...
+        %       D(2,3) == 0 && D(3,1) == 0 && D(3,2) == 0, ...
+        %    'Componentwise quadratic drag requires a diagonal D.');
         % True linear algebra matrix multiplication (Fastest Execution)
+        % With diagonal D >= 0, v''*f = -sum(D_ii*abs(v_i)^3) <= 0.
         f == - D * (v .* abs(v)); 
         t == 0;
     end
