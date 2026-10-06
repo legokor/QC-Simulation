@@ -17,17 +17,26 @@ component aero_drag_wrench
     end
 
     parameters
-        % Define your 3x3 drag tensor matrix. 
+        % Define your 3x3 drag tensor matrice between force and torque and themselves. 
         % Diagonal entries include density and projected area (rho*Cd*A/2).
         % Off-diagonal coupling is not passive in general for this law.
-        D = { [0.5, 0.0, 0.0; 
-               0.0, 0.8, 0.0; 
-               0.0, 0.0, 1.2], 'N/(m/s)^2' }; 
+        D_ff = { [0.5, 0.0, 0.0; 
+                0.0, 0.8, 0.0; 
+                0.0, 0.0, 1.2], 'N/(m/s)^2' }; 
+        D_tt = { [0.5, 0.0, 0.0; 
+                0.0, 0.8, 0.0; 
+                0.0, 0.0, 1.2], 'N*m/(rad/s)^2' }; 
+        D_ft = { [0.0, 0.0, 0.0; 
+                0.0, 0.0, 0.0; 
+                0.0, 0.0, 0.0], 'N/(rad/s)^2' }; 
+        D_tf = { [0.0, 0.0, 0.0; 
+                0.0, 0.0, 0.0; 
+                0.0, 0.0, 0.0], 'N*m/(m/s)^2' }; 
     end
 
     equations
 		% Ensure positiveness
-        assert(D(1,1) >= 0 && D(2,2) >= 0 && D(3,3) >= 0, ...
+        assert(D_ff(1,1) >= 0 && D_ff(2,2) >= 0 && D_ff(3,3) >= 0, ...
             'Drag coefficients must be nonnegative.');
 		% Offdiagonal enabled
         %assert(D(1,2) == 0 && D(1,3) == 0 && D(2,1) == 0 && ...
@@ -35,7 +44,7 @@ component aero_drag_wrench
         %    'Componentwise quadratic drag requires a diagonal D.');
         % True linear algebra matrix multiplication (Fastest Execution)
         % With diagonal D >= 0, v''*f = -sum(D_ii*abs(v_i)^3) <= 0.
-        f == - D * (v .* abs(v)); 
-        t == 0;
+        f == -v .* ((D_ff * abs(v)) + (D_ft * abs(w))); 
+        t == -w .* ((D_tf * abs(v)) + (D_tt * abs(w))); 
     end
 end
