@@ -20,18 +20,28 @@ component aero_drag_wrench
         % Define your 3x3 drag tensor matrice between force and torque and themselves. 
         % Diagonal entries include density and projected area (rho*Cd*A/2).
         % Off-diagonal coupling is not passive in general for this law.
-        D_ff = { [0.5, 0.0, 0.0; 
-                0.0, 0.8, 0.0; 
-                0.0, 0.0, 1.2], 'N/(m/s)^2' }; 
+        %
+        % Translational Damping
+        D_ff = { [0.5, 0.001, 0.05; 
+                0.001, 0.800, 0.05; 
+                0.010, 0.010, 1.20], 'N/(m/s)^2' }; 
+
+        % Rotational Damping
         D_tt = { [0.5, 0.0, 0.0; 
                 0.0, 0.8, 0.0; 
                 0.0, 0.0, 1.2], 'N*m/(rad/s)^2' }; 
-        D_ft = { [0.0, 0.0, 0.0; 
-                0.0, 0.0, 0.0; 
-                0.0, 0.0, 0.0], 'N/(rad/s)^2' }; 
-        D_tf = { [0.0, 0.0, 0.0; 
-                0.0, 0.0, 0.0; 
-                0.0, 0.0, 0.0], 'N*m/(m/s)^2' }; 
+
+        % Induced Force
+        %  - side forces from tilting
+        %  - from rotor assimetry?
+        D_ft = { [0.0, 0.005, 0.0; 
+                0.005, 0.0, 0.0; 
+                0.0, 0.0, 0.0], 'N/(m/s * rad/s)' }; 
+
+        % Induced Torque
+        D_tf = { [0.0, -0.001, 0.0; 
+                -0.001, 0.0, 0.0; 
+                0.0, 0.0, 0.0], 'N*m/(rad/s * m/s)' }; 
     end
 
     equations
