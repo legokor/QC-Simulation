@@ -5,6 +5,6 @@ disp("Parameters loaded")
 disp("Starting simulink ...")
 start_simulink
 disp("Loading main model and references ...")
-load_system("QC.slx")
+load_system("QC_PilotTraining.slx")
 disp("Opening main model ...")
-open_system("QC.slx")
+open_system("QC_PilotTraining.slx")
