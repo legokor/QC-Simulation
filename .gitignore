@@ -4,6 +4,7 @@ work*/
 # MATLAB cache, autosave and temporary files
 *.asv
 *.m~
+*.original
 *.autosave
 *.slx.autosave
 *.mdl.autosave
@@ -16,6 +17,7 @@ work*/
 # MATLAB/Simulink generated folders
 slprj/
 sccprj/
+*sldrt_win64/
 codegen/
 work/
 *.mexa64
@@ -23,6 +25,7 @@ work/
 *.mexmaca64
 *.mexw32
 *.mexw64
+*.rxw64
 
 # Simulink Coder generated output
 *_grt_rtw/
